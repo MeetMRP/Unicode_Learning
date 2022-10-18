@@ -10,3 +10,5 @@ class reg_admin(admin.ModelAdmin):
 @admin.register(name)
 class reg_admin(admin.ModelAdmin):
     list_display = [field.name for field in name._meta.fields]
+
+
