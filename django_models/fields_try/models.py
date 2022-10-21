@@ -20,7 +20,6 @@ class diff_field(models.Model):
     Title = models.CharField(max_length = 100)
     Describe = models.TextField()
     Random_quantity = models.IntegerField()
-    Inage = models.ImageField()
+    Image = models.ImageField(blank = True)
     Status = models.BooleanField()
     Date_time = models.DateTimeField()
-    #OneToOneField = models.OneToOneField('man', on_delete = models.CASCADE)

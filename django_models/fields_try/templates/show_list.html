@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show list</title>
+</head>
+
+<body>
+    {% if data %}
+    <U>
+        <h2>TO DO LIST:</h2>
+    </U>
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Random qunatity</th>
+            <th>Image</th>
+            <th>Status</th>
+            <th>Date and Time</th>
+            <th></th>
+            <th></th>
+        </thead>
+        {% for d in data %}
+        <tbody>
+            <td>{{d.Name}}</td>
+            <td>{{d.Title}}</td>
+            <td>{{d.Describe}}</td>
+            <td>{{d.Random_quantity}}</td>
+            <td>{{d.Image}}</td>
+            <td>{{d.Status}}</td>
+            <td>{{d.Date_time}}</td>
+            <td>
+                <form action="{% url edit %}">
+                    <button type="submit">Edit</button>
+                </form>
+            </td>
+            <td>
+                <form action="{% url delete %}">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tbody>
+        {% endfor %}
+    </table>
+    <form action="add_task/" method="post"> {% csrf_token%}
+        <button type="submit">Add task</button>
+    </form>
+    {% else %}
+    <h2>No such user found</h2>
+    <br>
+    <br>
+    <form action="new_user/" method="post"> {% csrf_token%}
+        <button type="submit">Add user</button>
+    </form>
+    {% endif %}
+</body>
+
+</html>
