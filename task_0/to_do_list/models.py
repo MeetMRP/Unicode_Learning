@@ -13,8 +13,11 @@ class to_do_list_model(models.Model):
     description = models.TextField()
     related_quantity = models.IntegerField()
     related_image = models.ImageField(blank = True)
-    task_ststus = models.BooleanField()
+    task_status = models.BooleanField()
     end_date = models.DateTimeField()
+
+    def assigned_to(self):
+        return ','.join([str(p) for p in self.assign_to.all()])
 
 class list_member(models.Model):
     to_do = models.ForeignKey(to_do_list_model, on_delete = models.CASCADE)
