@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+</head>
+
+<body>
+    <table>
+        <form action="" method="post"> {% csrf_token %}
+            {{ form }}
+            <tr>
+                <td><button type="submit">sign in</button></td>
+            </tr>
+        </form>
+    </table>
+    <form action="{% url 'login_user'%}"> {% csrf_token %}
+        <button type="submit">go to login page</button>
+    </form>
+</body>
+
+</html>

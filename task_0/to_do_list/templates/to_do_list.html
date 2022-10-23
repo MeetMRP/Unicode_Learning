@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To do list</title>
+</head>
+
+<body>
+    {% if data %}
+    <U>
+        <h2>TO DO LIST:</h2>
+    </U>
+    <table>
+        <thead>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Related qunatity</th>
+            <th>Image</th>
+            <th>Status</th>
+            <th>End date</th>
+            <th></th>
+            <th></th>
+        </thead>
+        {% for d in data %}
+        <tbody>
+            <td>{{d.task_title}}</td>
+            <td>{{d.description}}</td>
+            <td>{{d.related_quantity}}</td>
+            <td>{{d.related_image}}</td>
+            <td>{{d.task_ststus}}</td>
+            <td>{{d.end_date}}</td>
+        </tbody>
+        {% endfor %}
+    {% else %}
+        <h2>No tasks assigned</h2>
+    {% endif %}
+</body>
+
+</html>
