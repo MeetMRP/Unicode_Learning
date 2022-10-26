@@ -9,11 +9,17 @@
 </head>
 
 <body>
+  {% if message %}
+    <h1>{{message}}</h1>
+  {% endif %}
   <h1>Login:</h1>
   <table>
     <form action="" method="post">
       {% csrf_token %}
-      {{ form }}
+      Username:
+      <input type="text" name="username">
+      Password:
+      <input type="password" name="password">
       <tr>
         <td><button type="submit">submit</button></td>
       </tr>
@@ -21,7 +27,7 @@
   </table>
   <hr>
   <h3>Register a new user:</h3>
-  <form action="sign_in/"> {% csrf_token %}
+  <form action="sign_in/" method="post"> {% csrf_token %}
     <button type="submit">Sign in</button>
   </form>
 </body>

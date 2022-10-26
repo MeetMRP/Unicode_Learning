@@ -8,23 +8,23 @@ def login_user(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        print(user)
-        print(user.is_superuser)
+        user = authenticate(request, username=username, password=password)
         if user is not None:
-            #login(request, user)
+            login(request, user)
             if user.is_superuser:
-                return redirect('superuser', {'username':username})
+                return redirect('superuser')
             else:
-                return redirect('normyuser', {'username':username})
+                return redirect('normyuser')
         else:
-            return HttpResponse('add user')
+            return render(request, 'login.html', {'message': 'User dosent exists'})
     else:
-        fm = user_login()
-        return render(request, 'login.html', {'form': fm})
+        return render(request, 'login.html')
 
+    
+def superuser(request):
+    return render(request, 'sup_user_actions.html')
 
-def superuser(request, username):
+def superuser_add_list(request):
     if request.method == 'POST':
         fm = to_do_list_form(request.POST)
         if fm.is_valid():
@@ -35,9 +35,14 @@ def superuser(request, username):
     return render(request, 'add_list_to_users.html', {'form': fm})
 
 
-def normyuser(request, username):
-    data = to_do_list_model.objects.filter(username=username)
-    return render(request, 'to_do_list.html', {'data': data})
+def task_show_suser(request):
+    data = to_do_list_model.objects.all()
+    return render(request, 'task_show_suser.html', {'data': data})
+
+
+def normyuser(request):
+    user = to_do_list_model.objects.filter(assign_to=request.user)
+    return render(request, 'to_do_list.html', {'data': user})
 
 
 def sign_in(request):
@@ -50,25 +55,23 @@ def sign_in(request):
         fm = user_from()
     return render(request, 'sign_in.html', {'form': fm})
 
-def task_show_suser(request):
-    data = to_do_list_model.objects.all()
-    return render(request, 'task_show_suser.html', {'data':data})
 
 def delete(request, id):
     if request.method == 'POST':
-        obj_del = to_do_list_model.objects.get(pk = id)
+        obj_del = to_do_list_model.objects.get(pk=id)
         obj_del.delete()
         return HttpResponseRedirect('/superuser/task_show_suser/')
     else:
         return HttpResponse("can't delete")
 
+
 def edit(request, id):
     if request.method == 'POST':
-        obj_edit = to_do_list_model.objects.get(pk = id)
-        fm = to_do_list_form(request.POST, instance = obj_edit)
+        obj_edit = to_do_list_model.objects.get(pk=id)
+        fm = to_do_list_form(request.POST, instance=obj_edit)
         if fm.is_valid():
             fm.save()
     else:
-        obj_edit = to_do_list_model.objects.get(pk = id)
-        fm = to_do_list_form(instance = obj_edit)
-    return render(request, 'admin_edit.html', {'form' : fm})
+        obj_edit = to_do_list_model.objects.get(pk=id)
+        fm = to_do_list_form(instance=obj_edit)
+    return render(request, 'admin_edit.html', {'form': fm})

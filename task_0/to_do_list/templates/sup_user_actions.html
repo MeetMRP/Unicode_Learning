@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sup user actions</title>
+</head>
+<body>
+    <h1>Superuser pannel</h1>
+    <br>
+    <h4>Superuser can assign tasks to all users</h4>
+    <form action="{% url 'superuser_add_list' %}" method="post"> {% csrf_token %}
+        <button type="submit">Assign tasks</button>
+    </form>
+    <br>
+    <h4>Superuser can also see all the current task and it's status</h4>
+    <form action="{% url 'task_show_suser' %}" method="post"> {% csrf_token %}
+        <button type="submit">Show all tasks</button>
+    </form>
+</body>
+</html>
