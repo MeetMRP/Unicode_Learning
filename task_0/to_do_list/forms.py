@@ -11,8 +11,3 @@ class to_do_list_form(forms.ModelForm):
     class Meta:
         model = to_do_list_model
         fields = '__all__'
-
-class user_login(UserCreationForm):
-    class Meta:
-        model = user
-        fields = ['username', 'password']
