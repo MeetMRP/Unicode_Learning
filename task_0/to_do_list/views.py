@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
-from django.contrib.auth import authenticate, login
-from .forms import to_do_list_form, user_from, user_login
-from .models import to_do_list_model, user
+from django.contrib.auth import authenticate, login, logout
+from .forms import to_do_list_form, user_from
+from .models import to_do_list_models, user
 
 
 def login_user(request):
@@ -26,7 +26,7 @@ def superuser(request):
 
 def superuser_add_list(request):
     if request.method == 'POST':
-        fm = to_do_list_form(request.POST)
+        fm = to_do_list_form(request.POST, request.FILES)
         if fm.is_valid():
             fm.save()
             fm = to_do_list_form()
@@ -36,18 +36,18 @@ def superuser_add_list(request):
 
 
 def task_show_suser(request):
-    data = to_do_list_model.objects.all()
+    data = to_do_list_models.objects.all()
     return render(request, 'task_show_suser.html', {'data': data})
 
 
 def normyuser(request):
-    user = to_do_list_model.objects.filter(assign_to=request.user)
+    user = to_do_list_models.objects.filter(assign_to=request.user)
     return render(request, 'to_do_list.html', {'data': user})
 
 
 def sign_in(request):
     if request.method == 'POST':
-        fm = user_from(request.POST)
+        fm = user_from(request.POST, request.FILES)
         if fm.is_valid():
             fm.save()
             fm = user_from()
@@ -58,7 +58,7 @@ def sign_in(request):
 
 def delete(request, id):
     if request.method == 'POST':
-        obj_del = to_do_list_model.objects.get(pk=id)
+        obj_del = to_do_list_models.objects.get(pk=id)
         obj_del.delete()
         return HttpResponseRedirect('/superuser/task_show_suser/')
     else:
@@ -67,11 +67,11 @@ def delete(request, id):
 
 def edit(request, id):
     if request.method == 'POST':
-        obj_edit = to_do_list_model.objects.get(pk=id)
+        obj_edit = to_do_list_models.objects.get(pk=id)
         fm = to_do_list_form(request.POST, instance=obj_edit)
         if fm.is_valid():
             fm.save()
     else:
-        obj_edit = to_do_list_model.objects.get(pk=id)
+        obj_edit = to_do_list_models.objects.get(pk=id)
         fm = to_do_list_form(instance=obj_edit)
     return render(request, 'admin_edit.html', {'form': fm})
