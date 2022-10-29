@@ -9,6 +9,9 @@
 <body>
     <h1>Superuser pannel</h1>
     <br>
+    <img src="http://127.0.0.1:8000/media/{{info.profile_picture}}" alt="profile picture" height="250" >
+    <br>
+    <h2><u><b>{{info.username}}</b></u></h2>
     <h4>Superuser can assign tasks to all users</h4>
     <form action="{% url 'superuser_add_list' %}" method="post"> {% csrf_token %}
         <button type="submit">Assign tasks</button>

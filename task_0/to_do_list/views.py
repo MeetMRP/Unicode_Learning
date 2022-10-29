@@ -12,17 +12,20 @@ def login_user(request):
         if user is not None:
             login(request, user)
             if user.is_superuser:
-                return redirect('superuser')
+                return redirect('superuser', id=user.id)
             else:
-                return redirect('normyuser')
+                return redirect('normyuser', id=user.id)
         else:
             return render(request, 'login.html', {'message': 'User dosent exists'})
     else:
         return render(request, 'login.html')
 
-    
-def superuser(request):
-    return render(request, 'sup_user_actions.html')
+
+def superuser(request, id):
+    info = user.objects.get(pk=id)
+    print(info.profile_picture)
+    return render(request, 'sup_user_actions.html', {'info': info})
+
 
 def superuser_add_list(request):
     if request.method == 'POST':
@@ -40,9 +43,10 @@ def task_show_suser(request):
     return render(request, 'task_show_suser.html', {'data': data})
 
 
-def normyuser(request):
-    user = to_do_list_models.objects.filter(assign_to=request.user)
-    return render(request, 'to_do_list.html', {'data': user})
+def normyuser(request, id):
+    info = user.objects.get(pk=id)
+    data = to_do_list_models.objects.filter(assign_to=request.user)
+    return render(request, 'to_do_list.html', {'data': data, 'info': info})
 
 
 def sign_in(request):
