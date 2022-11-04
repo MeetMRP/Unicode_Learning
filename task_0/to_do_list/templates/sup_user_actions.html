@@ -7,6 +7,9 @@
     <title>Sup user actions</title>
 </head>
 <body>
+    <form action="{% url 'log_out' %}">
+        <button type="submit">logout</button>
+    </form>
     <h1>Superuser pannel</h1>
     <br>
     <img src="http://127.0.0.1:8000/media/{{info.profile_picture}}" alt="profile picture" height="250" >

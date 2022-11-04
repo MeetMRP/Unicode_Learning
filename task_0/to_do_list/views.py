@@ -2,6 +2,8 @@ from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirec
 from django.contrib.auth import authenticate, login, logout
 from .forms import to_do_list_form, user_from
 from .models import to_do_list_models, user
+from .decorators import unauthenticated_user, right_user, allowed_user
+from django.contrib.auth.decorators import login_required
 
 
 def login_user(request):
@@ -11,7 +13,9 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            if user.is_superuser:
+            if user.groups.all()[0].name == 'admin':
+                print(user.groups.all()[0])
+                print(user.groups.all())
                 return redirect('superuser', id=user.id)
             else:
                 return redirect('normyuser', id=user.id)
@@ -21,12 +25,15 @@ def login_user(request):
         return render(request, 'login.html')
 
 
+@login_required(login_url='/')
+@allowed_user(allowed_roles = ['admin'])
 def superuser(request, id):
     info = user.objects.get(pk=id)
-    print(info.profile_picture)
     return render(request, 'sup_user_actions.html', {'info': info})
 
 
+@login_required(login_url='/')
+@allowed_user(allowed_roles = ['admin'])
 def superuser_add_list(request):
     if request.method == 'POST':
         fm = to_do_list_form(request.POST, request.FILES)
@@ -38,11 +45,15 @@ def superuser_add_list(request):
     return render(request, 'add_list_to_users.html', {'form': fm})
 
 
+@login_required(login_url='/')
+@allowed_user(allowed_roles = ['admin'])
 def task_show_suser(request):
     data = to_do_list_models.objects.all()
     return render(request, 'task_show_suser.html', {'data': data})
 
 
+@login_required(login_url='/')
+@allowed_user(allowed_roles = ['normy_user'])
 def normyuser(request, id):
     info = user.objects.get(pk=id)
     data = to_do_list_models.objects.filter(assign_to=request.user)
@@ -60,6 +71,8 @@ def sign_in(request):
     return render(request, 'sign_in.html', {'form': fm})
 
 
+@login_required(login_url='/')
+@allowed_user(allowed_roles = ['admin'])
 def delete(request, id):
     if request.method == 'POST':
         obj_del = to_do_list_models.objects.get(pk=id)
@@ -69,6 +82,8 @@ def delete(request, id):
         return HttpResponse("can't delete")
 
 
+@login_required(login_url='/')
+@allowed_user(allowed_roles = ['admin'])
 def edit(request, id):
     if request.method == 'POST':
         obj_edit = to_do_list_models.objects.get(pk=id)
@@ -79,3 +94,7 @@ def edit(request, id):
         obj_edit = to_do_list_models.objects.get(pk=id)
         fm = to_do_list_form(instance=obj_edit)
     return render(request, 'admin_edit.html', {'form': fm})
+
+def log_out(request):
+    logout(request)
+    return redirect('login_user')
