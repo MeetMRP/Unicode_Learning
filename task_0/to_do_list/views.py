@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirec
 from django.contrib.auth import authenticate, login, logout
 from .forms import to_do_list_form, user_from
 from .models import to_do_list_models, user
-from .decorators import unauthenticated_user, right_user, allowed_user
+from .decorators import allowed_user
 from django.contrib.auth.decorators import login_required
 
 
