@@ -14,8 +14,6 @@ def login_user(request):
         if user is not None:
             login(request, user)
             if user.groups.all()[0].name == 'admin':
-                print(user.groups.all()[0])
-                print(user.groups.all())
                 return redirect('superuser', id=user.id)
             else:
                 return redirect('normyuser', id=user.id)
