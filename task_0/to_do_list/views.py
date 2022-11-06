@@ -14,9 +14,9 @@ def login_user(request):
         if user is not None:
             login(request, user)
             if user.groups.all()[0].name == 'admin':
-                return redirect('superuser', id=user.id)
+                return redirect('superuser')
             else:
-                return redirect('normyuser', id=user.id)
+                return redirect('normyuser')
         else:
             return render(request, 'login.html', {'message': 'User dosent exists'})
     else:
@@ -25,8 +25,8 @@ def login_user(request):
 
 @login_required(login_url='/')
 @allowed_user(allowed_roles = ['admin'])
-def superuser(request, id):
-    info = user.objects.get(pk=id)
+def superuser(request):
+    info = user.objects.get(pk = request.user.id)
     return render(request, 'sup_user_actions.html', {'info': info})
 
 
@@ -52,8 +52,8 @@ def task_show_suser(request):
 
 @login_required(login_url='/')
 @allowed_user(allowed_roles = ['normy_user'])
-def normyuser(request, id):
-    info = user.objects.get(pk=id)
+def normyuser(request):
+    info = user.objects.get(pk = request.user.id)
     data = to_do_list_models.objects.filter(assign_to=request.user)
     return render(request, 'to_do_list.html', {'data': data, 'info': info})
 
