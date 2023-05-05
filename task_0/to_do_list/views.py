@@ -13,10 +13,13 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            if user.groups.all()[0].name == 'admin':
-                return redirect('superuser')
-            else:
-                return redirect('normyuser')
+            try:
+                if user.groups.all()[0].name == 'admin':
+                    return redirect('superuser')
+                else:
+                    return redirect('normyuser')
+            except:
+                return HttpResponse("consult the server admin")
         else:
             return render(request, 'login.html', {'message': 'User dosent exists'})
     else:
